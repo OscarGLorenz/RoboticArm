@@ -10,6 +10,11 @@ import net.ddns.ogl.RoboticArm.Event.PressEvent;
 import net.ddns.ogl.RoboticArm.Event.SliderEvent;
 
 public class Listener {
+	Listener(ControlSlider device, int num) {
+		this.device = device;
+		this.pos = 0;
+		this.num = num;
+	}
 	Listener(ControlButton device, int num) {
 		this.device = device;
 		this.status = false;
@@ -23,11 +28,7 @@ public class Listener {
 		this.num = num;
 	}
 
-	Listener(ControlSlider device, int num) {
-		this.device = device;
-		this.pos = 0;
-		this.num = num;
-	}
+
 
 	private Object device;
 	private boolean status;
@@ -53,10 +54,11 @@ public class Listener {
 				return new HatEvent(false, num, dir);
 			}
 		} else if (device instanceof ControlSlider) {
-			if (!(new Float(((ControlSlider) device).getValue())).equals(new Float(pos))) {
+			int i = (int) (((ControlSlider) device).getValue()*1000);
+			 if (Math.abs(i) > 40) {
 				pos = ((ControlSlider) device).getValue();
 				return new SliderEvent(pos, num);
-			}
+			 }
 		}
 		return null;
 	}
